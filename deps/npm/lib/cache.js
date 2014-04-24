@@ -723,7 +723,7 @@ function installTargetsError (requested, data) {
 function addNameVersion (name, v, data, cb) {
   if (typeof cb !== "function") cb = data, data = null
 
-  ver = semver.valid(v, true)
+  var ver = semver.valid(v, true)
   if (!ver) return cb(new Error("Invalid version: "+v))
 
   var response
@@ -1107,9 +1107,7 @@ function addLocalDirectory (p, name, shasum, cb) {
   // tar it to the proper place, and add the cache tar
   if (p.indexOf(npm.cache) === 0) return cb(new Error(
     "Adding a cache directory to the cache will make the world implode."))
-  var strict = p.indexOf(npm.tmp) !== 0
-                && p.indexOf(npm.cache) !== 0
-  readJson(path.join(p, "package.json"), strict, function (er, data) {
+  readJson(path.join(p, "package.json"), false, function (er, data) {
     er = needName(er, data)
     er = needVersion(er, data)
     if (er) return cb(er)
@@ -1124,7 +1122,7 @@ function addLocalDirectory (p, name, shasum, cb) {
     getCacheStat(function (er, cs) {
       mkdir(path.dirname(tgz), function (er, made) {
         if (er) return cb(er)
-        tar.pack(tgz, p, data, strict, function (er) {
+        tar.pack(tgz, p, data, false, function (er) {
           if (er) {
             log.error( "addLocalDirectory", "Could not pack %j to %j"
                      , p, tgz )
@@ -1173,7 +1171,7 @@ function unpack (pkg, ver, unpackTarget, dMode, fMode, uid, gid, cb) {
       log.error("unpack", "Could not read data for %s", pkg + "@" + ver)
       return cb(er)
     }
-    npm.commands.unbuild([unpackTarget], function (er) {
+    npm.commands.unbuild([unpackTarget], true, function (er) {
       if (er) return cb(er)
       tar.unpack( path.join(npm.cache, pkg, ver, "package.tgz")
                 , unpackTarget
@@ -1205,17 +1203,11 @@ function lockFileName (u) {
   return path.resolve(npm.config.get("cache"), h + "-" + c + ".lock")
 }
 
-var madeCache = false
 var myLocks = {}
 function lock (u, cb) {
   // the cache dir needs to exist already for this.
-  if (madeCache) then()
-  else mkdir(npm.config.get("cache"), function (er) {
+  getCacheStat(function (er, cs) {
     if (er) return cb(er)
-    madeCache = true
-    then()
-  })
-  function then () {
     var opts = { stale: npm.config.get("cache-lock-stale")
                , retries: npm.config.get("cache-lock-retries")
                , wait: npm.config.get("cache-lock-wait") }
@@ -1225,7 +1217,7 @@ function lock (u, cb) {
       if (!er) myLocks[lf] = true
       cb(er)
     })
-  }
+  })
 }
 
 function unlock (u, cb) {
