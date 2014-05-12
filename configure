@@ -31,7 +31,7 @@ parser.add_option('--debug',
 parser.add_option('--dest-cpu',
     action='store',
     dest='dest_cpu',
-    help='CPU architecture to build for. Valid values are: arm, ia32, x64')
+    help='CPU architecture to build for. Valid values are: arm, arm64, ia32, x64')
 
 parser.add_option('--dest-os',
     action='store',
@@ -403,6 +403,7 @@ def host_arch_cc():
   matchup = {
     '__x86_64__'  : 'x64',
     '__i386__'    : 'ia32',
+    '__aarch64__'     : 'arm64',
     '__arm__'     : 'arm',
     '__mips__'    : 'mips',
   }
@@ -468,7 +469,15 @@ def configure_arm(o):
   o['variables']['arm_neon'] = int(is_arm_neon())
   o['variables']['arm_thumb'] = 0      # -marm
   o['variables']['arm_float_abi'] = arm_float_abi
+  if is_arch_armv7():
+    o['variables']['arm_version'] = 7
+  else:
+    o['variables']['arm_version'] = default
 
+def configure_arm64(o):
+  o['variables']['armv8'] = 1
+  o['variables']['aarch64'] = 1
+  o['variables']['arm64'] = 1
 
 def configure_node(o):
   if options.dest_os == 'android':
@@ -489,6 +498,8 @@ def configure_node(o):
 
   if target_arch == 'arm':
     configure_arm(o)
+  elif target_arch == 'arm64':
+    configure_arm64(o)
 
   cc_version, is_clang = compiler_version()
   o['variables']['clang'] = 1 if is_clang else 0
