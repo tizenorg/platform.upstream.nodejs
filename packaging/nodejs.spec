@@ -19,12 +19,24 @@ scalable network applications. Node.js uses an event-driven, non-blocking I/O mo
 that makes it lightweight and efficient, perfect for data-intensive real-time
 applications that run across distributed devices.
 
+%package devel
+Summary:	Header files for %{name}
+Group:		Development/Libraries
+Requires:	%{name}
+
+%description devel
+Development files for %{name}
+Node.js is a platform built on Chromes JavaScript runtime for easily building fast,
+scalable network applications. Node.js uses an event-driven, non-blocking I/O model
+that makes it lightweight and efficient, perfect for data-intensive real-time
+applications that run across distributed devices.
+
 %prep
 %setup -q
 
 %build
 
-./configure --prefix=%{_prefix} --without-dtrace
+./configure --prefix=%{_prefix} --without-dtrace --shared-openssl --shared-zlib
 make %{?_smp_mflags}
 
 %install
@@ -45,3 +57,7 @@ find %{buildroot}/usr/lib/node_modules -name '\.*' -delete
 %dir /usr/lib/node_modules
 %dir /usr/lib/node_modules/npm
 /usr/lib/node_modules/npm/*
+%{_datadir}/systemtap/*
+
+%files devel
+%{_includedir}/node/

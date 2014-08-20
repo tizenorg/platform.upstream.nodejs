@@ -36,7 +36,8 @@ function ls (args, silent, cb) {
   })
 
   var depth = npm.config.get("depth")
-  readInstalled(dir, depth, log.warn, function (er, data) {
+  var opt = { depth: depth, log: log.warn, dev: true }
+  readInstalled(dir, opt, function (er, data) {
     var bfs = bfsify(data, args)
       , lite = getLite(bfs)
 
@@ -62,6 +63,8 @@ function ls (args, silent, cb) {
       out = makeArchy(bfs, long, dir)
     }
     console.log(out)
+
+    if (args.length && !data._found) process.exitCode = 1
 
     // if any errors were found, then complain and exit status 1
     if (lite.problems && lite.problems.length) {
