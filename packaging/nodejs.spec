@@ -24,7 +24,7 @@ applications that run across distributed devices.
 
 %build
 
-./configure --prefix=%{_prefix} --without-dtrace
+./configure --prefix=%{_prefix} --without-dtrace --shared-openssl --shared-zlib
 make %{?_smp_mflags}
 
 %install
