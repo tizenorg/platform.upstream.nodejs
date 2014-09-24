@@ -1,5 +1,5 @@
 Name:          nodejs
-Version:       0.10.13
+Version:       0.12.0
 Release:       1
 Summary:       Evented I/O for V8 JavaScript
 Group:         System/Service
