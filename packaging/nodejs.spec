@@ -19,6 +19,16 @@ scalable network applications. Node.js uses an event-driven, non-blocking I/O mo
 that makes it lightweight and efficient, perfect for data-intensive real-time
 applications that run across distributed devices.
 
+%package devel
+Summary:       Header files for %{name}
+Group:         Development/Libraries
+Requires:      %{name}
+
+%description devel
+Node.js is a server-side JavaScript environment that uses an asynchronous
+event-driven model. This allows Node.js to get excellent performance based on
+the architectures of many Internet applications.
+
 %prep
 %setup -q
 
@@ -33,6 +43,7 @@ make %{?_smp_mflags}
 # cleanup leftover cruft
 rm -fR %{buildroot}/usr/lib/dtrace
 find %{buildroot}/usr/lib/node_modules -name '\.*' -delete
+rm -f %{buildroot}/usr/share/systemtap/tapset/node.stp
 
 %fdupes %{buildroot}/usr/lib/node_modules
 
@@ -45,3 +56,6 @@ find %{buildroot}/usr/lib/node_modules -name '\.*' -delete
 %dir /usr/lib/node_modules
 %dir /usr/lib/node_modules/npm
 /usr/lib/node_modules/npm/*
+
+%files devel
+%{_includedir}/node/
