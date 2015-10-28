@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: nodejs
+Description: Evented I/O for V8 JavaScript
+Version: 0.12.0
+Libs:
+Cflags: -I${includedir}
