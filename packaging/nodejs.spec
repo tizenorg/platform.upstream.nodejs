@@ -11,6 +11,7 @@ License:       MIT
 BuildRequires: python
 BuildRequires: fdupes
 BuildRequires: pkgconfig(zlib)
+BuildRequires: pkgconfig(openssl)
 
 %description
 Node.js is a platform built on Chromes JavaScript runtime for easily building fast,
@@ -36,7 +37,8 @@ cp %{SOURCE2} .
 ./configure --prefix=%{_prefix} \
 	--without-dtrace \
 	--without-npm \
-	--shared-zlib
+	--shared-zlib \
+	--shared-openssl
 
 make %{?_smp_mflags}
 
