@@ -36,7 +36,6 @@ cp %{SOURCE2} .
 
 ./configure --prefix=%{_prefix} \
 	--without-dtrace \
-	--without-npm \
 	--shared-zlib \
 	--shared-openssl
 
@@ -53,6 +52,9 @@ sed -e "s#@prefix@#%{_prefix}#g" \
     -e "s#@version@#%{version}#g" \
     %SOURCE1 > %{buildroot}/%{_libdir}/pkgconfig/%{name}.pc
 
+# copy common.gypi for node-gyp
+cp common.gypi %{buildroot}/%{_includedir}/node/common.gypi
+
 # cleanup leftover cruft
 rm -f %{buildroot}/usr/share/systemtap/tapset/node.stp
 rm -fr %{buildroot}/usr/share/doc
@@ -62,6 +64,8 @@ rm -fr %{buildroot}/usr/share/man
 %manifest %{name}.manifest
 %defattr(-,root,root)
 %{_bindir}/node
+%{_bindir}/npm
+/usr/lib/node_modules/npm/
 
 %files devel
 %{_includedir}/node/
