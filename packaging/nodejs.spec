@@ -27,6 +27,14 @@ Requires:      %{name}
 %description devel
 Development libraries for Node.js
 
+%package npm
+Summary:       npm tools for %{name}
+Group:         Development/Libraries
+Requires:      %{name}
+
+%description npm
+npm tools for Node.js
+
 %prep
 %setup -q
 
@@ -64,10 +72,12 @@ rm -fr %{buildroot}/usr/share/man
 %manifest %{name}.manifest
 %defattr(-,root,root)
 %{_bindir}/node
-%{_bindir}/npm
-/usr/lib/node_modules/npm/
 
 %files devel
 %{_includedir}/node/
 %{_libdir}/pkgconfig/*.pc
+
+%files npm
+%{_bindir}/npm
+/usr/lib/node_modules/npm/
 
