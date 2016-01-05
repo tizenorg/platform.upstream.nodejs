@@ -43,14 +43,14 @@ cp %{SOURCE2} .
 %build
 
 ./configure --prefix=%{_prefix} \
+	--without-snapshot \
 	--without-dtrace \
 	--shared-zlib \
 	--shared-openssl
 
-make %{?_smp_mflags}
-
 %install
-%make_install
+# run make install without previous make to avoid building twice
+make %{?_smp_mflags} install DESTDIR=%{buildroot}
 
 mkdir -p %{buildroot}/%{_libdir}/pkgconfig
 sed -e "s#@prefix@#%{_prefix}#g" \
