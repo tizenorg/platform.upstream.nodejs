@@ -1,5 +1,5 @@
 Name:          nodejs
-Version:       4.2.3
+Version:       4.2.6
 Release:       1
 Summary:       Evented I/O for V8 JavaScript
 Group:         System/Service
