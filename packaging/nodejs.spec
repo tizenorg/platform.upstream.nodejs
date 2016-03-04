@@ -7,7 +7,7 @@ URL:           http://nodejs.org/
 Source:        %{name}-%{version}.tar.gz
 Source1:       %{name}.pc.in
 Source2:       %{name}.manifest
-License:       MIT
+License:       MIT and BSD-3-Clause and Apache-2.0 and Artistic-2.0
 BuildRequires: python
 BuildRequires: fdupes
 BuildRequires: pkgconfig(zlib)
@@ -68,8 +68,13 @@ rm -f %{buildroot}/usr/share/systemtap/tapset/node.stp
 rm -fr %{buildroot}/usr/share/doc
 rm -fr %{buildroot}/usr/share/man
 
+# license
+mkdir -p %{buildroot}%{_datadir}/license
+cp LICENSE %{buildroot}%{_datadir}/license/%{name}
+
 %files
 %manifest %{name}.manifest
+%{_datadir}/license/%{name}
 %defattr(-,root,root)
 %{_bindir}/node
 
