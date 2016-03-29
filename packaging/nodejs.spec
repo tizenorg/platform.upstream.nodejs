@@ -71,6 +71,7 @@ rm -fr %{buildroot}/usr/share/man
 # license
 mkdir -p %{buildroot}%{_datadir}/license
 cp LICENSE %{buildroot}%{_datadir}/license/%{name}
+cat LICENSE.Apache-2.0 >> %{buildroot}%{_datadir}/license/%{name}
 
 %files
 %manifest %{name}.manifest
